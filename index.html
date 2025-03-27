@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>₹1 Crore Startup Quiz - Spin Wheel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .wheel-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 20px auto;
+    }
+    .wheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 10px solid #333;
+      background: conic-gradient(
+        #4CAF50 0deg 60deg,
+        #FFC107 60deg 120deg,
+        #2196F3 120deg 180deg,
+        #E91E63 180deg 240deg,
+        #9C27B0 240deg 300deg,
+        #FF5722 300deg 360deg
+      );
+      transition: transform 4s ease-out;
+    }
+    .pointer {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 20px solid #333;
+    }
+    button {
+      padding: 12px 24px;
+      background: #000;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    .popup {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+    }
+    .popup.active {
+      visibility: visible;
+    }
+    .popup-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 90%;
+      text-align: center;
+    }
+    .popup-content h2 {
+      margin-top: 0;
+    }
+    @media (max-width: 500px) {
+      .wheel-container {
+        width: 240px;
+        height: 240px;
+      }
+      button {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>₹1 Crore Startup Quiz</h1>
+  <div class="wheel-container">
+    <div class="pointer"></div>
+    <div class="wheel" id="wheel"></div>
+  </div>
+  <button id="spinBtn">Spin the Wheel</button>
+
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <h2>Your Question</h2>
+      <p id="questionText"></p>
+      <button onclick="closePopup()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const wheel = document.getElementById('wheel');
+    const popup = document.getElementById('popup');
+    const questionText = document.getElementById('questionText');
+
+    const questions = [
+      "What is maximum time period for a DPIIT-recognized startup to apply for 80-IAC tax exemption?",
+      "Which 5 metrics should every founder track before approaching an investor?",
+      "If your startup makes ₹1 crore in profit, how much tax can be saved using 80-IAC?",
+      "What’s the full form of MVP in startup language?",
+      "Which government platform helps you get listed as a seller to large PSUs and government buyers?",
+      "True or False: DPIIT recognition automatically gives you funding."
+    ];
+
+    let deg = 0;
+
+    document.getElementById('spinBtn').addEventListener('click', () => {
+      const randomSpin = Math.floor(1024 + Math.random() * 3000);
+      deg += randomSpin;
+      wheel.style.transform = `rotate(${deg}deg)`;
+
+      setTimeout(() => {
+        const normalizedDeg = deg % 360;
+        const sector = Math.floor(normalizedDeg / 60);
+        const questionIndex = (6 - sector) % 6; // Adjust for reverse spin
+        questionText.textContent = questions[questionIndex];
+        popup.classList.add('active');
+      }, 4200);
+    });
+
+    function closePopup() {
+      popup.classList.remove('active');
+    }
+  </script>
+
+</body>
+</html>
